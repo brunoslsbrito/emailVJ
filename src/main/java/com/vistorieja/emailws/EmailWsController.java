@@ -2,6 +2,7 @@ package com.vistorieja.emailws;
 
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class EmailWsController {
 
     @CrossOrigin(origins = "*", maxAge = 3600)
     @RequestMapping(path = "/email-send/{email}/{msg}", method = RequestMethod.GET)
-    public String sendMail(@PathVariable("email") String email, @PathVariable("msg") String msg) {
+    public HttpStatus sendMail(@PathVariable("email") String email, @PathVariable("msg") String msg) {
         SimpleMailMessage message = new SimpleMailMessage();
 
 
@@ -34,9 +35,9 @@ public class EmailWsController {
             message.setSubject("[VistorieJá] - Recuperação de Senha");
             message.setText(usuario.getPassword());
             mailSender.send(message);
-            return "Email enviado com sucesso!";
+            return HttpStatus.OK;
         } catch (Exception e) {
-            return "Erro ao enviar email.";
+            return HttpStatus.NOT_FOUND;
         }
     }
 
