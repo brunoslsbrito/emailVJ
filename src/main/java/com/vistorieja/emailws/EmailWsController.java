@@ -27,8 +27,9 @@ public class EmailWsController {
 
 
         try {
-            UsuarioDto usuario = recuperarUsuario(email);
-            montarEmail(usuario,message);
+            String newPassword = PasswordGenerator.getRandomPassword(8);
+            UsuarioDto usuario = recuperarUsuario(email,newPassword);
+            montarEmail(usuario,message,newPassword);
             mailSender.send(message);
             return HttpStatus.OK;
         } catch (Exception e) {
@@ -36,11 +37,11 @@ public class EmailWsController {
         }
     }
 
-    public UsuarioDto recuperarUsuario(String email) {
+    public UsuarioDto recuperarUsuario(String email, String newPassword) {
         UsuarioDto usuario = null;
         try {
             Gson gson = new Gson();
-            URL url = new URL("http://www.vistorieja.com/rest/usuario/find/" + email);
+            URL url = new URL("http://www.vistorieja.com/rest/usuario/recovery/" + email + "/" + newPassword);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
             if (con.getResponseCode() != HTTP_COD_SUCESSO) {
@@ -59,7 +60,7 @@ public class EmailWsController {
         return usuario;
     }
 
-    private void montarEmail(UsuarioDto usuario, SimpleMailMessage email) {
+    private void montarEmail(UsuarioDto usuario, SimpleMailMessage email, String newPassword) {
 
         email.setTo(usuario.getEmail());
         email.setFrom("contato@vistorieja.com");
@@ -69,7 +70,7 @@ public class EmailWsController {
         String  corpoMsg = "<html><style>.email {width:100%;padding:4 4 4 4;font-family:arial;font-size:12px;text-align:justify;}</style><body>"
                 + "<span class='email'>"
                 + "<br/>Bem-vindo, "+ usuario.getEmail()+" !</br>" +
-                "Sua senha é:" + usuario.getPassword()+
+                "Sua senha é:" + newPassword +
                 "<br/><br/>"
                 + "<b>Atenciosamente,</b><br/>"
                 + "<b>Formul&aacute;rio de Contato - VistorieJï¿½</b><br/>"
