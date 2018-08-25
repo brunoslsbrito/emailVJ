@@ -5,8 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.internet.MimeMessage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -102,8 +105,29 @@ public class EmailWsController {
         SimpleMailMessage message = new SimpleMailMessage();
 
         try {
-            montarEmailSignup(email,message);
-            mailSender.send(message);
+            final JavaMailSenderImpl sender = new JavaMailSenderImpl();
+
+            MimeMessage mimeMessage = sender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
+            String htmlMsg = "<style>.email {width:100%;padding:4 4 4 4;font-family:arial;font-size:12px;text-align:justify;}</style><body>\"\n" +
+                    "                + \"<span class='email'>\"\n" +
+                    "                + \"<br/>Bem-vindo, ao VistorieJá!</br>\" +\n" +
+                    "                \"<br/><br/>\"\n" +
+                    "                + \"<b>Atenciosamente,</b><br/>\"\n" +
+                    "                + \"<b>Formul&aacute;rio de Contato - VistorieJï¿½</b><br/>\"\n" +
+                    "                + \"<b>E-mail:&nbsp;</b> contato@vistorieja.com <br/>\"\n" +
+                    "                + \"http://www.vistorieja.com.br<br/>\"\n" +
+                    "                + \"</span></body>";
+            mimeMessage.setContent(htmlMsg, "text/html");
+            helper.setTo(email);
+            helper.setSubject("[VistorieJá] - Bem vindo!");
+            helper.setFrom("contato@vistorieja.com");
+            sender.send(mimeMessage);
+
+//            montarEmailSignup(email,message);
+//
+//
+//            mailSender.send(message);
             return HttpStatus.OK;
         } catch (Exception e) {
             return HttpStatus.NOT_FOUND;
