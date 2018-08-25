@@ -79,6 +79,37 @@ public class EmailWsController {
                 + "</span></body></html>";
         email.setText(corpoMsg);
     }
+    private void montarEmailSignup(String email, SimpleMailMessage message) {
+
+        message.setTo(email);
+        message.setFrom("contato@vistorieja.com");
+        message.setSubject("[VistorieJá] - Bem vindo!");
+        String  corpoMsg = "<html><style>.email {width:100%;padding:4 4 4 4;font-family:arial;font-size:12px;text-align:justify;}</style><body>"
+                + "<span class='email'>"
+                + "<br/>Bem-vindo, ao VistorieJá!</br>" +
+                "<br/><br/>"
+                + "<b>Atenciosamente,</b><br/>"
+                + "<b>Formul&aacute;rio de Contato - VistorieJï¿½</b><br/>"
+                + "<b>E-mail:&nbsp;</b> contato@vistorieja.com <br/>"
+                + "http://www.vistorieja.com.br<br/>"
+                + "</span></body></html>";
+        message.setText(corpoMsg);
+    }
+
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @RequestMapping(path = "/send-email-signup/{email}", method = RequestMethod.GET)
+    public HttpStatus sendMailSignup(@PathVariable("email") String email) {
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        try {
+            montarEmailSignup(email,message);
+            mailSender.send(message);
+            return HttpStatus.OK;
+        } catch (Exception e) {
+            return HttpStatus.NOT_FOUND;
+        }
+    }
+
 
 }
 
