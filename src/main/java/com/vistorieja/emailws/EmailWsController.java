@@ -71,33 +71,15 @@ public class EmailWsController {
         email.setSubject("[VistorieJá] - Recuperação de Senha");
         email.setText(usuario.getPassword());
         email.setTo(usuario.getEmail());
-        String  corpoMsg = "<html><style>.email {width:100%;padding:4 4 4 4;font-family:arial;font-size:12px;text-align:justify;}</style><body>"
+        String corpoMsg = "<html><style>.email {width:100%;padding:4 4 4 4;font-family:arial;font-size:12px;text-align:justify;}</style><body>"
                 + "<span class='email'>"
-                + "<br/>Bem-vindo, "+ usuario.getEmail()+" !</br>" +
-                "Sua senha é:" + newPassword +
-                "<br/><br/>"
+                + "<br/><br/><br/>"
                 + "<b>Atenciosamente,</b><br/>"
                 + "<b>Formul&aacute;rio de Contato - VistorieJï¿½</b><br/>"
-                + "<b>E-mail:&nbsp;</b> contato@vistorieja.com <br/>"
+                + "<b>E-mail:&nbsp; contato@vistorieja.com.b</b><br/>"
                 + "http://www.vistorieja.com.br<br/>"
                 + "</span></body></html>";
         email.setText(corpoMsg);
-    }
-    private void montarEmailSignup(String email, SimpleMailMessage message) {
-
-        message.setTo(email);
-        message.setFrom("contato@vistorieja.com");
-        message.setSubject("[VistorieJá] - Bem vindo!");
-        String  corpoMsg = "<html><style>.email {width:100%;padding:4 4 4 4;font-family:arial;font-size:12px;text-align:justify;}</style><body>"
-                + "<span class='email'>"
-                + "<br/>Bem-vindo, ao VistorieJá!</br>" +
-                "<br/><br/>"
-                + "<b>Atenciosamente,</b><br/>"
-                + "<b>Formul&aacute;rio de Contato - VistorieJï¿½</b><br/>"
-                + "<b>E-mail:&nbsp;</b> contato@vistorieja.com <br/>"
-                + "http://www.vistorieja.com.br<br/>"
-                + "</span></body></html>";
-        message.setText(corpoMsg);
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -121,18 +103,17 @@ public class EmailWsController {
 
             MimeMessage mimeMessage = sender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
-            String htmlMsg = "<style>.email {width:100%;padding:4 4 4 4;font-family:arial;font-size:12px;text-align:justify;}</style><body>\"\n" +
-                    "                + \"<span class='email'>\"\n" +
-                    "                + \"<br/>Bem-vindo, ao VistorieJá!</br>\" +\n" +
-                    "                \"<br/><br/>\"\n" +
-                    "                + \"<b>Atenciosamente,</b><br/>\"\n" +
-                    "                + \"<b>Formul&aacute;rio de Contato - VistorieJï¿½</b><br/>\"\n" +
-                    "                + \"<b>E-mail:&nbsp;</b> contato@vistorieja.com <br/>\"\n" +
-                    "                + \"http://www.vistorieja.com.br<br/>\"\n" +
-                    "                + \"</span></body>";
+            String htmlMsg = "<html><style>.email {width:100%;padding:4 4 4 4;font-family:arial;font-size:12px;text-align:justify;}</style><body>"
+                    + "<span class='email'>"
+                    + "<br/><br/><br/>"
+                    + "<b>Atenciosamente,</b><br/>"
+                    + "<b>Formul&aacute;rio de Contato - VistorieJï¿½</b><br/>"
+                    + "<b>E-mail:&nbsp;</b><br/>"
+                    + "http://www.vistorieja.com.br<br/>"
+                    + "</span></body></html>";
             mimeMessage.setContent(htmlMsg, "text/html");
             helper.setTo(email);
-            helper.setSubject("[VistorieJá] - Bem vindo!");
+            helper.setSubject("VistorieJá - Bem vindo!");
             helper.setFrom("contato@vistorieja.com");
             sender.send(mimeMessage);
 
