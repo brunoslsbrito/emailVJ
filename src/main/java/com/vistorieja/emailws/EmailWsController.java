@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Properties;
 
 @RestController
 public class EmailWsController {
@@ -106,6 +107,17 @@ public class EmailWsController {
 
         try {
             final JavaMailSenderImpl sender = new JavaMailSenderImpl();
+            sender.setUsername(email);
+            sender.setPassword("1*Contato");
+            sender.setHost("mail55.redehost.com.br");
+            sender.setPort(587);
+            sender.setUsername("contato@vistorieja.com");
+            Properties prop = new Properties();
+            prop.put("mail.smtp.auth",true);
+            prop.put("mail.smtp.timeout","25000");
+
+            sender.setJavaMailProperties(prop);
+
 
             MimeMessage mimeMessage = sender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
@@ -130,6 +142,7 @@ public class EmailWsController {
 //            mailSender.send(message);
             return HttpStatus.OK;
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return HttpStatus.NOT_FOUND;
         }
     }
